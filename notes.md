@@ -1,81 +1,63 @@
-# Exploring Math with Visuals ~~ A gentle introduction to shaders ~~
-
-###                               
-
-
-
-<style>
-@media print {
-  h1 {
-    page-break-before: always;
-  }
-  h1:first-of-type {
-    page-break-before: avoid;
-  }
-}
-</style>
+# Exploring Math with Visuals: A gentle introduction to shaders
 
 # Goals
 
 To get more comfortable with all this weird / annoying / intimidating / [??] math-y stuff ...
 
-And maybe even start enjoying it 
+And maybe even start enjoying it
 
-###Why? 
+### Why?
 
-Math-y stuff is everywhere for the kinds of things (I'm assuming) we're all interested in — 
+Math-y stuff is everywhere for the kinds of things (I'm assuming) we're all interested in —
 
 * laying out things on a webpage
 
 * receiving sensor data from an arduino
 
-*  creating digital assets for fabrication 
+* creating digital assets for fabrication
 
-* music & visuals 
+* music & visuals
 
-*  origami curtain outside
 
-All these things involve dealing with numbers, and shaping and bending them 
+All these things involve dealing with numbers, and shaping and bending them
 
 ---
 
 # Why shaders? What are shaders?
 
-* Small computer programs used for *shading* things [3d objects] — determining how the color interacts with light, choosing colors to create a texture. The stuff that can make a basic sphere in a 3d environment look like a marble vs a tennis ball vs a golf ball vs … 
+* Small computer programs used for *shading* things [3d objects] — determining how the color interacts with light, choosing colors to create a texture. The stuff that can make a basic sphere in a 3d environment look like a marble vs a tennis ball vs a golf ball vs …
 
-  
 
-* They generally need some kind of application that loads and runs them — eg, Processing, openFrameworks, Unity, TouchDesigner etc 
 
-  
+* They generally need some kind of application that loads and runs them — eg, Processing, openFrameworks, Unity, TouchDesigner etc
+
+
 
 * But there's some standalone environments created to play with shaders in a more 2d way (like what we will use)
 
-  
 
-* Programming with constraints can be a fun challenge, and people like to see how far they can push this 
+
+* Programming with constraints can be a fun challenge, and people like to see how far they can push this
 
 ---
 
-#What are these constraints? 
+# What are these constraints?
 
-###I'm a pixel, these are my coordinates, tell me what color I should be 
+> I'm a pixel, these are my coordinates, tell me what color I should be
 
 *INPUT*: x and y location
 
 *OUTPUT*: color (red, green, blue, alpha values ie RGBA)
 
-**No knowledge of other pixels, no knowledge of what has happened before, and all pixels want an answer to this at the same time** 
+**No knowledge of other pixels, no knowledge of what has happened before, and all pixels want an answer to this at the same time**
 
 **JUST SOME MATH FUNCTIONS MODIFYING THE INPUT NUMBERS TO PRODUCE THE OUTPUT NUMBERS**
 
 ---
 
-<div class="page-break"></div>
+Think of color-by-number — by coloring each grid square in a specified color, an image emerges
 
-Think of color-by-number — by coloring each grid square in a specified color, an image emerges 
-
-<img src="/Users/noisyneuron/ITP/2019_camp/shaders/color-by-number.jpg" width="50%" />
+<img src="images/color-by-number.jpg" width="50%" />
 
 ---
 
@@ -83,37 +65,39 @@ Think of color-by-number — by coloring each grid square in a specified color, 
 
 Shaders are similar, except they use just math to determine the color, based on the location of the pixel
 
-<img src="/Users/noisyneuron/ITP/2019_camp/shaders/iq1.png" width="75%" />
-
+<img src="images/iq1.png" width="75%" />
+<br>
 https://www.shadertoy.com/view/ld3Gz2
 
 ---
 
-<img src="/Users/noisyneuron/ITP/2019_camp/shaders/iq2.png" width="75%" />
+<img src="images/iq2.png" width="75%" />
 
+<br>
 https://www.shadertoy.com/view/MdX3Rr
+<br>
 
-We're *not* going to learn how to make scenes like these. 
+We're *not* going to learn how to make scenes like these.
 
-We are going to write and play with very basic shaders -- since there is a very direct connection between the math and visuals, it is a great way to get more comfortable and enjoy math more 
+We are going to write and play with very basic shaders -- since there is a very direct connection between the math and visuals, it is a great way to get more comfortable and enjoy math more
 
 ---
 
 # format
 
-There are sample shaders in the GitHub repo — we're going to go through these one by one. They build off each other aside from a couple of exceptions. 
+There are sample shaders in the GitHub repo — we're going to go through these one by one. They build off each other aside from a couple of exceptions.
 
 Before jumping right into the files, we'll try to work through the logic for a given problem, **without code**
 
 I would encourage you to try to write code and use the files as reference incase you get stuck, but if that seems really daunting, feel free to copy-paste code and tweak.
 
-We're going to use the Book of Shaders editor : [http://editor.thebookofshaders.com/](http://editor.thebookofshaders.com/)
+We're going to use the Book of Shaders editor : [https://thebookofshaders.com/edit.php](https://thebookofshaders.com/edit.php)
 
-*note: there is a bug in the editor that doesn't let you access a URL to your shader. If you make something you love and don't want to lose it, be sure to hit "Export" > "Download File"*
+**note**: *there is a bug in the editor that doesn't let you access a URL to your shader. If you make something you love and don't want to lose it, be sure to hit "Export" > "Download File"*
 
 ---
 
-# 1.frag
+# File: *1.frag*
 
 Let's copy paste this in to start with, just to get a sense of the editor and what we're dealing with
 
@@ -125,7 +109,7 @@ Click on any of the numbers in purple — you can slide the slider to change the
 
 # language and syntax  
 
-Shaders use a language called GLSL (OpenGL Shading Language) 
+Shaders use a language called GLSL (OpenGL Shading Language)
 
 We are going to ignore these lines for now — just trust its something important that should be there
 
@@ -145,7 +129,7 @@ void main() {
 }
 ```
 
-Depending on the platform or tool one is using to write a shader, some stuff will be given to us 
+Depending on the platform or tool one is using to write a shader, some stuff will be given to us
 
 `gl_FragCoord` is the INPUT variable, that holds the coordinates of the pixel we want to color
 
@@ -157,13 +141,13 @@ Depending on the platform or tool one is using to write a shader, some stuff wil
 
 There are different *types* of variables used in shaders
 
-`float` is just a single number with a decimal point. *the decimal point is VERY important, so we can't just write the number `10`, we need to write `10.0`
+`float` is just a single number with a decimal point. *the decimal point is VERY important, so we can't just write the number `10`, we need to write `10.0`*
 
 ```
 float myNumber = 10.0;
 ```
 
-`vec2`, `vec3` and `vec4` are *collections* of numbers, more specifically, a collection of `float`s. `vec2` is a collection of 2 numbers; `vec3` a collection of 3 numbers; and `vec4` is a collection of 4 numbers. 
+`vec2`, `vec3` and `vec4` are *collections* of numbers, more specifically, a collection of `float`s. `vec2` is a collection of 2 numbers; `vec3` a collection of 3 numbers; and `vec4` is a collection of 4 numbers.
 
 (There is *no* `vec5` and beyond)
 
@@ -201,7 +185,7 @@ We can use either of these methods interchangeably — both ways are provided so
 
 ---
 
-#language and syntax 
+# language and syntax
 
 A color is specified with 4 components — Red, Green, Blue and Alpha (transparency) — similar to what one might see in Photoshop or CSS or p5.js etc
 
@@ -214,7 +198,7 @@ vec4 black = vec4(0.0, 0.0, 0.0, 1.0);
 
 ---
 
-# language and syntax 
+# language and syntax
 
 Depending on the tool or software we are using a shader with, we might already be provided with some `uniform` variables
 
@@ -222,7 +206,7 @@ Depending on the tool or software we are using a shader with, we might already b
 uniform vec2 u_resolution;
 ```
 
-A `uniform` variable is something that is accessible to ALL the pixels — its value stays the same regardless of the pixel's coordinates. 
+A `uniform` variable is something that is accessible to ALL the pixels — its value stays the same regardless of the pixel's coordinates.
 
 The program that runs the shader can provide the shader with as many `uniform` variables and values as needed.
 
@@ -237,7 +221,7 @@ uniform float u_time; // the time elapsed (in seconds) since we loaded the page
 And lastly, comment in GLSL are similar to other languages:
 
 ```
-// this is a comment	
+// this is a comment
 ```
 
 
@@ -250,35 +234,35 @@ You might have noticed that all these examples have values that are between 0 an
 
 * It makes everything much easier when there is a universally understood range. If we know position coordinates are always between 0 and 1, and color values are always between 0 and 1, we could directly base color on the position without worrying about our numbers being too big or too small.
 
-  
+
 
 * Things are intuitive to understand, because we have a strong understanding of percentages… ie 0.1 is 10%, 0.5 is 50% etc
 
-  
+
 
 * It allows for a lot of nifty math and logic related things, which we will see as we go on
 
-The range between 0 and 1 is often referred to as *normalized* 
+The range between 0 and 1 is often referred to as *normalized*
 
 ---
 
-# 1.frag
+# File: *1.frag*
 
 The input, `gl_FragCoord` holds the *actual* coordinates of the pixel, in relation to the canvas. Ie, if the canvas is 100 x 100 pixels, `gl_FragCoord ` will have a maximum `x` and `y` value of 100.
 
 We want things to be in the 0 to 1 range however, so the first thing we do is *normalize* the coordinates, assigning the result to a new variable `normPos`
 
-``` 
+```
 vec2 normPos = gl_FragCoord.xy/u_resolution.xy;
 ```
 
-We then use the position on the `x` axis to help decide what color each pixel should be. When the pixel is close to the origin, the `x` value is closer to 0, and so there is very little red. 
+We then use the position on the `x` axis to help decide what color each pixel should be. When the pixel is close to the origin, the `x` value is closer to 0, and so there is very little red.
 
 ```
 gl_FragColor = vec4(normPos.x, 0.0, 0.0, 1.0);
 ```
 
-####Where is the origin?? 
+#### Where is the origin??
 
 BOTTOM - LEFT corner. ie the pixel at the bottom left has coordinates of (0.0, 0.),
 
@@ -286,7 +270,7 @@ And the pixel at the TOP - RIGHT has coordinates (1.0, 1.0)
 
 ---
 
-# 1.frag
+# File: *1.frag*
 
 The comments in the code have some suggestions for things to try out — based on what we know so far, can we do all of these things?
 
@@ -302,9 +286,11 @@ The comments in the code have some suggestions for things to try out — based o
 
 # Halves
 
-Can we describe in English the process we would use to generate this? 
+Can we describe in English the process we would use to generate this?
 
-<img src="/Users/noisyneuron/ITP/2019_camp/shaders/half-half.png" width="50%" />
+<img src="images/half-half.png" width="50%" />
+
+<br>
 
 Remember 'shader way of thinking' : "I'm a little pixel at this X and Y position, what color should I be?"
 
@@ -312,21 +298,21 @@ Hint: GLSL has if-else statements etc
 
 ---
 
-# 2-1.frag
+# File: *2-1.frag*
 
 The code answer is in this file — but try writing it out!
 
 Try clicking on one of the colors you have made (ie the `vec4` ) — you should see a color-picker appear. The editor is smart in recognizing what kind of variable you are dealing with, and gives you the appropriate controls.
 
-Can we create gradients instead of solid colors? Remember: The shader is executed for *each* pixel. Every pixel comes to the shader with different coordinates. 
+Can we create gradients instead of solid colors? Remember: The shader is executed for *each* pixel. Every pixel comes to the shader with different coordinates.
 
 ---
 
-# 2-2.frag
+# File: *2-2.frag*
 
-The same as the previous file, except with gradients and different colors. 
+The same as the previous file, except with gradients and different colors.
 
-By having one component of the color depend on the `y` coordinate of the pixel, we get vertical gradients. 
+By having one component of the color depend on the `y` coordinate of the pixel, we get vertical gradients.
 
 ```
     vec4 color1 = vec4(normPos.y, .2, 0.4, 1.0);
@@ -341,11 +327,11 @@ What if we wanted to draw a circle? Let's say a white circle with a black backgr
 
 What do we know about circles? How can we use this?
 
-**Remember: "I'm a little pixel that knows nothing except my location, please tell me what color to be"
+**Remember: "I'm a little pixel that knows nothing except my location, please tell me what color to be"**
 
 ---
 
-# 3-1.frag
+# File: *3-1.frag*
 
 We want a way to know if the pixel is inside or outside the circle, and we will decide its color based on this.
 
@@ -389,25 +375,25 @@ Similar to what we did earlier, we can have our pixel color depend on the distan
 
 # Animation
 
-This is all great, but static images are pretty boring. What if wanted things to move? 
+This is all great, but static images are pretty boring. What if wanted things to move?
 
 We are provided with the `uniform` variable `u_time`
 
 `uniform float u_time;`
 
-Which gives us the time in seconds as a `float` — eg 1.23265252 seconds elapsed since we loaded the page 
+Which gives us the time in seconds as a `float` — eg 1.23265252 seconds elapsed since we loaded the page
 
-What if we tried making the color depend on `u_time` ? 
+What if we tried making the color depend on `u_time` ?
 
-What do we know about the range of `u_time`? 
+What do we know about the range of `u_time`?
 
-What do we know about the acceptable range for a color? 
+What do we know about the acceptable range for a color?
 
 Will we run into any problems?
 
 ---
 
-# 3-2.frag
+# File: *3-2.frag*
 
 Let's try doing this :
 
@@ -415,7 +401,7 @@ Let's try doing this :
 color = vec4(u_time,0.135,0.400,1.000);
 ```
 
-Since `u_time` is constantly increasing, and GLSL only cares for color values between 0 and 1, we don't see an animation — any color value above 1.0 is treated the same as 1.0 
+Since `u_time` is constantly increasing, and GLSL only cares for color values between 0 and 1, we don't see an animation — any color value above 1.0 is treated the same as 1.0
 
 There's another GLSL function that we could use — `fract`
 
@@ -423,16 +409,16 @@ There's another GLSL function that we could use — `fract`
 
 ```
 fract(10.192) // returns .192
-fract(67.192) // returns .192 
+fract(67.192) // returns .192
 ```
 
-Can we use this function to fix the earlier issues, and create some movement / animation ? 
+Can we use this function to fix the earlier issues, and create some movement / animation ?
 
 If we keep giving `fract` increasing values (such as `u_time`), what kind of pattern would we expect with the numbers we get back?
 
 ---
 
-# 3-2.frag
+# File: *3-2.frag*
 
 Since `fract` always gives us the fractional portion of a number, we know it's range, and it's the kind of range we like!  0 - 1
 
@@ -441,7 +427,8 @@ We can keep giving it increasing numbers, and it will repetitively keep returnin
 So by *wrapping* `u_time` in `fract` , we can be in a happy range again. Let's try this :
 
 ```
-color = vec4(fract(u_time),0.135,0.400,1.000);
+red = fract(u_time);
+color = vec4(red, 0.135, 0.400, 1.000);
 ```
 
 ---
@@ -454,12 +441,13 @@ What other piece of information do we want the color to depend on?
 
 ---
 
-# 3-3.frag
+# File: *3-3.frag*
 
 By having our color depend on the pixel's distance from the center, *and* on time, we get a nice animated gradient
 
-``` 
-color = vec4(fract(dist + u_time),0.135,0.400,1.000);
+```
+float red = fract(dist + u_time);
+color = vec4(red,0.135,0.400,1.000);
 ```
 
 What if we wanted to change the direction of our animation? Does `fract` care if we give it positive or negative values?
@@ -467,13 +455,15 @@ What if we wanted to change the direction of our animation? Does `fract` care if
 We could simply subtract `u_time` instead :
 
 ```
-color = vec4(fract(dist - u_time),0.135,0.400,1.000);
+float red = fract(dist - u_time);
+color = vec4(red, 0.135,0.400,1.000);
 ```
 
-`fract` has a repetitive nature. We could scale up our calculated distance, and `fract` will still be able to deal with it — what do we think will happen? Try multiplying `dist` with some biggish number, try different numbers… 
+`fract` has a repetitive nature. We could scale up our calculated distance, and `fract` will still be able to deal with it — what do we think will happen? Try multiplying `dist` with some biggish number, try different numbers…
 
 ```
-color = vec4(fract(dist*8.0 - u_time),0.135,0.400,1.000);
+float red = fract(dist*8.0 - u_time);
+color = vec4(red,0.135,0.400,1.000);
 ```
 
 
@@ -484,15 +474,15 @@ color = vec4(fract(dist*8.0 - u_time),0.135,0.400,1.000);
 
 * Animate the position of the circle
 
-  
+
 
 * Animate the size of the circle
 
-  
+
 
 * Color the area outside the circle in an interesting way
 
-  
+
 
 * Animate the area outside as well
 
@@ -500,17 +490,17 @@ color = vec4(fract(dist*8.0 - u_time),0.135,0.400,1.000);
 
 # Diagonal gradient
 
-Let's look at how we can use the repetitive nature of `fract`  more, but first, let's try creating a diagonal gradient. 
+Let's look at how we can use the repetitive nature of `fract`  more, but first, let's try creating a diagonal gradient.
 
-What bits of information can we use for this? 
+What bits of information can we use for this?
 
 If a horizontal gradient depends on the `x` coordinate, and a vertical gradient depends on the `y` coordinate, what does a diagonal gradient depend on?
 
 ---
 
-# 4-1.frag
+# File: *4-1.frag*
 
-We want to consider both, the `x` and `y` values — we could do this in many different ways, but a simple way would be to average them 
+We want to consider both, the `x` and `y` values — we could do this in many different ways, but a simple way would be to average them
 
 ```
 float avg = (normPos.x + normPos.y)/2.;
@@ -528,15 +518,15 @@ How can I use some math and GLSL functions to bend and shape the values of the p
 
 Let's consider a few possible values that a pixel's `x` coordinate could be
 
-```x
-0.2  0.4  0.6  0.8  1.0
+```
+0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0
 ```
 
 Now let's multiply these values, or scale up, by the number of columns we want, ie by 5
 
 ```
-0.2  0.4  0.6  0.8  1.0  --> multiply by 5
-1.0  1.5  3.0  3.5  5.0 
+0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  --> multiply by 5
+0.5  1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0
 ```
 
 Now we have this range of 0 to 5, which is not ideal since we prefer a 0-1 range...
@@ -544,24 +534,24 @@ Now we have this range of 0 to 5, which is not ideal since we prefer a 0-1 range
 But what if we use our `fract` function again?
 
 ```
-0.2  0.4  0.6  0.8  1.0  --> multiply by 5
-1.0  1.5  3.0  3.5  5.0  --> pass these values to the fract() function
-0.0  0.5  0.0  0.5  0.0
+0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  --> multiply by 5
+0.5  1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  --> pass these values to the fract() function
+0.5  0.0  0.5  0.0  0.5  0.0  0.5  0.0  0.5  0.0
 ```
 
 Now we're seeing some of that repetition that `fract` gives us… Why is this useful?
 
-When we decided how to color the pixel, all we used were some two numbers between 0 and 1. The code does not know that those numbers were the exact `x` and `y` coordinates — it just uses the numbers, passes it through our math equations, calculates something and spits it out. 
+When we decided how to color the pixel, all we used were some two numbers between 0 and 1. The code does not know that those numbers were the exact `x` and `y` coordinates — it just uses the numbers, passes it through our math equations, calculates something and spits it out.
 
-The fact that these numbers correspond visually to this 2 dimensional space is something that we see… 
+The fact that these numbers correspond visually to this 2 dimensional space is something that we see…
 
 Remember how we normalized the pixel coordinate right in the beginning? We could have done some other weird math right there, and the code wouldn't care, it'll just take in the numbers we give it and do what we tell it to do with them...
 
-So, what if we gave it these new values we just established? 
+So, what if we gave it these new values we just established?
 
 ---
 
-# 4-2.frag
+# File: *4-2.frag*
 
 Translating the previous steps into code, we have something like this:
 
@@ -603,7 +593,7 @@ We have managed to take our initial input values that were between 0 and 1, and 
 
 ---
 
-# 4-3.frag
+# File: *4-3.frag*
 
 We can just copy-past in our circle code after we have calculated our new `scaledFract` values, and then all we need to do is calculate our distance using this new value
 
@@ -629,31 +619,31 @@ We have tiling, which is great, but the animation is identical for all of them, 
 
 What if we could know which row or column we were dealing with, and animate them differently, or change some properties based on the row or column number… ?
 
-Do we have enough information to do this? 
+Do we have enough information to do this?
 
 Let's look at those values again:
 
 ```
-0.2  0.4  0.6  0.8  1.0  --> multiply by 5
-1.0  1.5  3.0  3.5  5.0  --> pass these values to the fract() function
-0.0  0.5  0.0  0.5  0.0
+0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  --> multiply by 5
+0.5  1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  --> pass these values to the fract() function
+0.5  0.0  0.5  0.0  0.5  0.0  0.5  0.0  0.5  0.0
 ```
 
-`fract` just threw away one part of our number — but perhaps this could be useful? 
+`fract` just threw away one part of our number — but perhaps this could be useful?
 
 There's a function that does the exact opposite of `fract` — it throws away the fractional part and keeps the whole-number part — which is a concept we're already familiar with : *rounding down*. In GLSL (and many other languages) this is the `floor` function.
 
 ```
-0.2  0.4  0.6  0.8  1.0  --> multiply by 5
-1.0  1.5  3.0  3.5  5.0  --> pass these values to the floor() function
-1.0  1.0  3.0  3.0  5.0
+0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  --> multiply by 5
+0.5  1.0  1.5  2.0  2.5  3.0  3.5  4.0  4.5  5.0  --> pass these values to the fract() function
+0.0  1.0  1.0  2.0  2.0  3.0  4.0  4.0  4.0  0.0
 ```
 
 This is essentially telling us the row/column number
 
 ---
 
-# 4-4.frag
+# File: *4-4.frag*
 
 Let's convert this to code too:
 
@@ -670,7 +660,8 @@ vec2 scaledIndex = floor(scaledPos);
 Now we can use this in our color calculation:
 
 ```
-color = vec4( fract(dist*4. + scaledIndex.x - u_time),0.135,0.400,1.000) ;
+float red = fract(dist*4. + scaledIndex.x - u_time);
+color = vec4( red, 0.135, 0.400, 1.000) ;
 ```
 
 Though this doesn't work out quite as planned… why?
@@ -686,7 +677,8 @@ If we multiply them by a small number though — something less that 1, we start
 With this we can have our columns animate at slightly different phases
 
 ```
-color = vec4( fract(dist*4. + scaledIndex.x*0.1 - u_time),0.135,0.400,1.000) ;
+float red = fract(dist*4. + scaledIndex.x*0.1 - u_time);
+color = vec4( red, 0.135,0.400,1.000) ;
 ```
 
 ---
@@ -697,11 +689,11 @@ Not that kind of sin. The trignometry *sine* kind of sin...
 
 We can understand sin and cos with circles and angles --
 
-If we were draw a radius of a circle at a given angle from the center, and then keep increasing the angle, thereby traveling along the circumference of the circle, 
+If we were draw a radius of a circle at a given angle from the center, and then keep increasing the angle, thereby traveling along the circumference of the circle,
 
-The `x` coordinate of the circle gives us `sin(angle)`, and the `y` coordinate gives us `cos(angle)`
+The `x` coordinate of the circle gives us `cos(angle)`, and the `y` coordinate gives us `sin(angle)`
 
-![sincos](/Users/noisyneuron/ITP/2019_camp/sincos.gif)
+![sincos](images/sincos.gif)
 
 https://thebookofshaders.com/05/sincos.gif
 
@@ -713,21 +705,21 @@ We could pass a forever increasing value like `u_time` into `sin` or `cos`, and 
 
 ---
 
-# 5-1.frag
+# File: *5-1.frag*
 
-Let's animate our radius using `sin` 
+Let's animate our radius using `sin`
 
 ```
 float radius = sin(u_time);
 ```
 
-We could speed up the animation by scaling up time , ie multiplying it by a number bigger than 1 — making the input into `sin`  change faster, and therefore making our animation faster..
+We could speed up the animation by scaling up time, ie multiplying it by a number bigger than 1 — making the input into `sin`  change faster, and therefore making our animation faster..
 
-But there's a problem here.. why does everything black out for a bit? 
+But there's a problem here.. why does everything black out for a bit?
 
 ---
 
-# 5-2.frag
+# File: *5-2.frag*
 
 `sin` gives us back values between -1 and 1… what does a radius of -0.2 mean for a circle though?
 
@@ -751,7 +743,7 @@ radius = map(radius, -1.0, 1.0, 0.1, 0.6);
 
 ---
 
-# 5-3.frag
+# File: *5-3.frag*
 
 We could use our column and row numbers (or indices) to make the animation less uniform
 
@@ -781,7 +773,7 @@ One could come up with all kinds of weird equations like this, that could be use
 
 ---
 
-# 5-4.frag
+# File: *5-4.frag*
 
 Lets use one of these functions to create a more interesting animation:
 
@@ -803,15 +795,13 @@ And a whole lot else! We could bring back the animated gradients with `fract`, h
 
 # What next?
 
+* Upload your sketches [here](https://drive.google.com/drive/folders/1IS6ekYCqdhfQFBvQP7GL0VrYyzk8q2UY?usp=sharing) for our online glalery!
 * The Book of Shaders https://thebookofshaders.com/ — read about noise and randomness, and a whole lot else
-* Book of Shaders example page https://thebookofshaders.com/examples/ — click on any example to see and edit the code 
+* Book of Shaders example page https://thebookofshaders.com/examples/ — click on any example to see and edit the code
 * See more GLSL functions : https://thebookofshaders.com/glossary/
 * Shadertoy https://www.shadertoy.com/ — be amazed and utterly confused by the code [*note*: the `uniforms` have different names ]
-* Pixel Spirit Deck — https://twitter.com/pixelspiritdeck?lang=en 
+* Pixel Spirit Deck — https://twitter.com/pixelspiritdeck?lang=en
+* Graphing -- https://www.desmos.com/calculator
+* Awesome math videos on youtube -- https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw
 
 ---
-
-
-
-
-
